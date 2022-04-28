@@ -1,0 +1,11 @@
+description: >
+  Default Odoo Executor
+docker:
+  - image: odoo:15.0
+  - image: cimg/postgres:13.0
+    name: db
+    environment:
+      PGDATA: /dev/shm/pgdata/data
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORK: odoo

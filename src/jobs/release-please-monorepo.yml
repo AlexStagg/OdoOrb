@@ -1,0 +1,21 @@
+description: Update release PRs and create GitHub releases
+executor: renovate
+paramaters:
+  args:
+    description: "Extra args to pass to release-please"
+    type: string
+    default: ""
+steps:
+  - checkout
+  - run:
+      command: |
+        npm install --global release-please@11.23.0
+      name: Install release-please
+  - run:
+      command: |
+        for command in manifest-pr manifest-release; do
+          release-please << parameters.args >> --debug "${command}" \
+            --token "${GITHUB_TOKEN_BOT}" \
+            --repo-url "${CIRCLE_REPOSITORY_URL}"
+        done
+      name: Run release-please

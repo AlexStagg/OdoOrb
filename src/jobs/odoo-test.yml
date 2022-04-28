@@ -1,0 +1,12 @@
+description: Run specified odoo tests
+executor: odoo
+parameters:
+  tests:
+    description: "What tests should be run?"
+    type: string
+    default: standard
+steps:
+  - checkout
+  - run:
+      command: |
+        odoo-bin --test-enable --test-tags << parameters.tests >> 

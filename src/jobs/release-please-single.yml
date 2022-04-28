@@ -1,0 +1,27 @@
+description: Update release PRs and create GitHub releases
+executor: renovate
+prameters:
+  language:
+    descriptions: "What language are we releasing for?"
+    type: enum
+    default: "python"
+    enum: ["dart", "elixir", "go", "helm", "krm-blueprint", "node", "ocaml", "php", "python", "ruby", "rust", "simple", "terraform-module"]
+  args:
+    description: "Extra args to pass to release-please"
+    type: string
+    default: ""
+steps:
+  - checkout
+  - run:
+      command: |
+        npm install --global release-please@11.23.0
+      name: Install release-please
+  - run:
+      command: |
+        for command in release-pr github-release; do
+          release-please << parameters.args >> --debug "${command}" \
+            --token "${GITHUB_TOKEN_BOT}" \
+            --release-type << parameters.language >> \
+            --repo-url "${CIRCLE_REPOSITORY_URL}"
+        done
+      name: Run release-please

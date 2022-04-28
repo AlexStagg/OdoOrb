@@ -1,0 +1,17 @@
+description: Build and release package to ghcr.io
+parameters:
+  repo:
+    description: github package
+    type: string
+  version:
+    description: image tag
+    type: string
+docker:
+  - image: cimg/base:latest
+steps:
+  - checkout
+  - setup_remote_docker
+  - run: |
+      docker login ghcr.io/ -u "${GITHUB_USERNAME}" -p "${GITHUB_TOKEN}"
+      docker build -t ghcr.io/<< parameters.repo >>:<< parameters.version >> .
+      docker push ghcr.io/<< parameters.repo >>:<< parameters.version >>
